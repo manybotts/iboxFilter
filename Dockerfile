@@ -1,12 +1,14 @@
 FROM python:3.8-slim-buster
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
+RUN apt update && apt upgrade -y && apt install git -y
 
-RUN cd /
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
-RUN mkdir /Advance-Auto-Filter
+RUN groupadd -r myuser && useradd -r -g myuser myuser
+
+COPY . /Advance-Auto-Filter
 WORKDIR /Advance-Auto-Filter
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"]
+
+RUN pip3 install -U pip && pip3 install -U -r requirements.txt
+
+USER myuser # Switch to non-root user
+
+CMD ["/bin/bash", "/Advance-Auto-Filter/start.sh"]
