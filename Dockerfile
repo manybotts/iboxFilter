@@ -4,11 +4,12 @@ RUN apt update && apt upgrade -y && apt install git -y
 
 RUN groupadd -r myuser && useradd -r -g myuser myuser
 
-COPY . /Advance-Auto-Filter
+COPY . /Advance-Auto-Filter # Adjust if your project directory is different
 WORKDIR /Advance-Auto-Filter
+RUN chown -R myuser:myuser /Advance-Auto-Filter
 
 RUN pip3 install -U pip && pip3 install -U -r requirements.txt
 
-USER myuser # Switch to non-root user
+USER myuser
 
-CMD ["/bin/bash", "/Advance-Auto-Filter/start.sh"]
+CMD ["/bin/bash", "/start.sh"] # Or /Advance-Auto-Filter/start.sh if needed
